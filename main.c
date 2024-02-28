@@ -10,7 +10,7 @@ gcc -o executavel.exe cliente.o main.o
 
 */
 
-int main(void){
+int main(){
 FILE *arquivo = fopen("clientes.txt", "at");
 if(arquivo == NULL){
     printf("Erro na execucao clientes.txt\n");
@@ -20,12 +20,12 @@ if(arquivo == NULL){
 fclose(arquivo);
 
 int numClientes;
-Cliente *cliente = lerClientes("clientes.txt", &numClientes);
+struct Cliente *cliente = lerClientes("clientes.txt", &numClientes);
 
 int opc, continua = 1;
 while(continua){
 
-    Menu(clientes, &opc);
+    Menu(cliente, &opc);
 
     switch(opc){
 case 1:
