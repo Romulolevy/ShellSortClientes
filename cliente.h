@@ -30,5 +30,9 @@ void Dados_Cliente(Cliente *cliente, int numClientes);
 /*
 Função principal para ordenação dos clientes presentes no arquivo .txt
 */
-void ShellSort(FILE *arquivo, int cont);
+void ShellSort(Cliente *arr, int cont);
 
+/*
+
+*/
+void Ordena_Cliente(FILE *arquivo, int numClientes);

@@ -1,5 +1,6 @@
 #include "cliente.h"
 #include <stdlib.h>
+#include <string.h>
 
 int VerificaDados(const char *str) {
   while (*str){
@@ -49,9 +50,9 @@ void Imprimir_Clientes(Cliente *cliente, int numClientes){
 }
 
 void Menu(Cliente *cliente, int *opc) {
-system("clear");
-printf("----------- Seja bem Vindo -----------");
-printf("Oque deseja fazer: (1)- Cadastrar Cliente: \n (2)- Mostrar Ordenacao \n (3)- Sair \n");
+system("cls");
+printf("----------- Seja bem Vindo -----------\n");
+printf("Oque deseja fazer:\n (1)- Cadastrar Cliente: \n (2)- Mostrar Ordenacao \n (3)- Sair \n");
 scanf("%d", opc);
 }
 
@@ -64,9 +65,14 @@ printf("Insforme um ID para o cliente: \n");
 scanf("%d", &novoID);
 // Tratativa para verificar existencia de um ID parecido
 for (int i = 0; i < numClientes; i++) {
+  if(isalpha(cliente[i].ID)){
+    printf("ID inserido nao e um numero valido: \n");
+    scanf("%d", novoID);
+    i = -1;
+  }
   if (cliente[i].ID == novoID){
     printf("ID ja existente, Insira um novo ID: \n");
-    scanf("%D", novoID);
+    scanf("%d", novoID);
     i = -1;
   }
 }
@@ -93,28 +99,48 @@ fprintf(arquivo, "ID: %d\t Nome: %s\t Endereco: %s\n", cliente[numClientes].ID, 
 fclose(arquivo);
 }
 
-void shellSort(FILE *arquivo, int cont) {
-
+void ShellSort(Cliente *arr, int cont) {
+  printf(arr);
   for (int intervalo = cont / 2; intervalo > 0; intervalo /= 2) {
-
     for (int i = intervalo; i < cont; i += 1) {
-
       Cliente temp = arr[i];
-
       int j;
-
       for (j = i; j >= intervalo && arr[j - intervalo].ID > temp.ID; j -= intervalo) {
-
         arr[j] = arr[j - intervalo];
       }
       arr[j] = temp;
-      int size = sizeof(arr) / sizeof(arr[0])
-      char *arr_to_string = strjoin(arr[i], "\n", arr[size - 1])
-
-      for (int i = 0; i < size; i++) {
-        fprintf(arquivo, arr_to_string[i]);
-       }
-      fclose(arquivo);
     }
   }
+}
+
+void Ordena_Cliente(FILE *arquivo, int numClientes){
+Cliente *cliente = (Cliente *)malloc((numClientes + 1) * sizeof(Cliente));
+if (cliente == NULL){
+  printf("Erro ao alocar memoria. \n");
+  exit(EXIT_FAILURE);
+}
+
+int j = 0;
+while(fscanf(arquivo, " %[^\n]; %[^\n]; %d\n", cliente[j].nome, cliente[j].endereco, &cliente[j].ID) == 3){
+  j++;
+}
+
+Cliente lerClientes("clientes.txt", numClientes);
+cliente[j] = *Dados_Cliente(Ler, numClientes);
+j++;
+ShellSort(cliente, j);
+
+arquivo = fopen("clientes.txt", "w");
+
+if (arquivo == NULL){
+ printf("Erro ao abrir o arquivo para escrita.\n");
+  exit(EXIT_FAILURE);
+}
+for (int i = 0; i < j; i++) {
+  fprintf(arquivo, "%s;%s;%d\n", cliente[i].nome, cliente[i].endereco, cliente[i].ID);
+  }
+
+  fclose(arquivo);
+
+
 }

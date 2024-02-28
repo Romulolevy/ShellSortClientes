@@ -29,8 +29,12 @@ while(continua){
 
     switch(opc){
 case 1:
-printf("Informe os Dados do novo Cliente: \n");
-Dados_Cliente(cliente, numClientes);
+FILE *arquivo = fopen("clientes.txt", "at");
+if(arquivo == NULL){
+    printf("Erro na execucao clientes.txt\n");
+    return 1;
+}
+Ordena_Cliente(arquivo, numClientes);
 numClientes++;
 break;
 
